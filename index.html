@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scrolling Video Website</title>
+    <style>
+        /* Basic Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        /* Full-page sections */
+        body, html {
+            height: 100%;
+            font-family: Arial, sans-serif;
+        }
+
+        .section {
+            position: relative;
+            width: 100vw;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        /* Video styles */
+        .video {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* Make sure the video covers the entire screen */
+        }
+
+        /* Optional: Add any other styling to your sections */
+        #section1 {
+            background: rgba(0, 0, 0, 0.5); /* Example background */
+        }
+
+        /* Add smooth scroll behavior */
+        html {
+            scroll-behavior: smooth;
+        }
+
+        /* Optional: Add padding to content inside sections */
+        .section-content {
+            z-index: 2;
+            color: white;
+            font-size: 2rem;
+            text-align: center;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Section 1 -->
+    <div class="section" id="section1">
+        <video class="video" autoplay muted loop>
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        </video>
+        <audio class="audio" autoplay loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mp3">
+        </audio>
+        <div class="section-content">
+            Section 1 Content
+        </div>
+    </div>
+
+    <!-- Section 2 -->
+    <div class="section" id="section2">
+        <video class="video" autoplay muted loop>
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        </video>
+        <audio class="audio" autoplay loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-2.mp3" type="audio/mp3">
+        </audio>
+        <div class="section-content">
+            Section 2 Content
+        </div>
+    </div>
+
+    <!-- Section 3 -->
+    <div class="section" id="section3">
+        <video class="video" autoplay muted loop>
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        </video>
+        <audio class="audio" autoplay loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-3.mp3" type="audio/mp3">
+        </audio>
+        <div class="section-content">
+            Section 3 Content
+        </div>
+    </div>
+
+    <!-- Section 4 -->
+    <div class="section" id="section4">
+        <video class="video" autoplay muted loop>
+            <source src="https://www.w3schools.com/html/movie.mp4" type="video/mp4">
+        </video>
+        <audio class="audio" autoplay loop>
+            <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-4.mp3" type="audio/mp3">
+        </audio>
+        <div class="section-content">
+            Section 4 Content
+        </div>
+    </div>
+
+    <script>
+        // JavaScript for smooth scrolling between sections
+        document.querySelectorAll('.section').forEach((section, index) => {
+            section.addEventListener('wheel', function (e) {
+                if (e.deltaY > 0) {
+                    if (index < 3) {
+                        window.scrollTo({
+                            top: (index + 1) * window.innerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                } else {
+                    if (index > 0) {
+                        window.scrollTo({
+                            top: (index - 1) * window.innerHeight,
+                            behavior: 'smooth'
+                        });
+                    }
+                }
+            });
+        });
+    </script>
+
+</body>
+</html>
