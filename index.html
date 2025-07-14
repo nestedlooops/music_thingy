@@ -1,139 +1,173 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Scrolling Video Website</title>
-    <style>
-        /* Basic Reset */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Scrolling WebP + Audio</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
 
-        /* Full-page sections */
-        body, html {
-            height: 100%;
-            font-family: Arial, sans-serif;
-        }
+    html, body {
+      height: 100%;
+      scroll-behavior: smooth;
+      font-family: Arial, sans-serif;
+    }
 
-        .section {
-            position: relative;
-            width: 100vw;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
+    .section {
+      position: relative;
+      width: 100vw;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-size: cover;
+      background-position: center;
+      background-repeat: no-repeat;
+    }
 
-        /* Video styles */
-        .video {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            width: 100%;
-            height: 100%;
-            object-fit: cover; /* Make sure the video covers the entire screen */
-        }
+    .section-content {
+      z-index: 2;
+      color: white;
+      font-size: 2rem;
+      text-align: center;
+      text-shadow: 0 0 10px black;
+    }
 
-        /* Optional: Add any other styling to your sections */
-        #section1 {
-            background: rgba(0, 0, 0, 0.5); /* Example background */
-        }
-
-        /* Add smooth scroll behavior */
-        html {
-            scroll-behavior: smooth;
-        }
-
-        /* Optional: Add padding to content inside sections */
-        .section-content {
-            z-index: 2;
-            color: white;
-            font-size: 2rem;
-            text-align: center;
-        }
-    </style>
+    .audio {
+      display: none;
+    }
+  </style>
 </head>
 <body>
 
-    <!-- Section 1 -->
-    <div class="section" id="section1">
-        <video class="video" autoplay muted loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/1752474394068.webp" type="video/mp4">
-        </video>
-        <audio class="audio" autoplay loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/Blue.mp3" type="audio/mp3">
-        </audio>
-        <div class="section-content">
-            Blue
-        </div>
-    </div>
+  <!-- Section 1 -->
+  <div class="section" id="section1"
+       style="background-image: url('https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474394068.webp')">
+    <audio class="audio" id="audio1" loop>
+      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/Blue.mp3" type="audio/mp3">
+    </audio>
+    <div class="section-content">Blue</div>
+  </div>
 
-    <!-- Section 2 -->
-    <div class="section" id="section2">
-        <video class="video" autoplay muted loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/1752474441601.webp" type="video/mp4">
-        </video>
-        <audio class="audio" autoplay loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/Yerin%20Baek(%EB%B0%B1%EC%98%88%EB%A6%B0)%20_Bye%20bye%20my%20blue_%20MV.mp3" type="audio/mp3">
-        </audio>
-        <div class="section-content">
-            Bye Bye My Blue
-        </div>
-    </div>
+  <!-- Section 2 -->
+  <div class="section" id="section2"
+       style="background-image: url('https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474441601.webp')">
+    <audio class="audio" id="audio2" loop>
+      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/Yerin%20Baek(%EB%B0%B1%EC%98%88%EB%A6%B0)%20_Bye%20bye%20my%20blue_%20MV.mp3" type="audio/mp3">
+    </audio>
+    <div class="section-content">Bye Bye My Blue</div>
+  </div>
 
-    <!-- Section 3 -->
-    <div class="section" id="section3">
-        <video class="video" autoplay muted loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/1752474437531.webp" type="video/mp4">
-        </video>
-        <audio class="audio" autoplay loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/YUNGBLUD%20-%20Zombie%20(Official%20Music%20Video).mp3" type="audio/mp3">
-        </audio>
-        <div class="section-content">
-            Zombie
-        </div>
-    </div>
+  <!-- Section 3 -->
+  <div class="section" id="section3"
+       style="background-image: url('https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474437531.webp')">
+    <audio class="audio" id="audio3" loop>
+      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/YUNGBLUD%20-%20Zombie%20(Official%20Music%20Video).mp3" type="audio/mp3">
+    </audio>
+    <div class="section-content">Zombie</div>
+  </div>
 
-    <!-- Section 4 -->
-    <div class="section" id="section4">
-        <video class="video" autoplay muted loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/videoplayback.mp4" type="video/mp4">
-        </video>
-        <audio class="audio" autoplay loop>
-            <source src="https://github.com/nestedlooops/music_thingy/blob/main/Lake%20Shore%20Drive.mp3" type="audio/mp3">
-        </audio>
-        <div class="section-content">
-            Lake Shore Drive
-        </div>
-    </div>
+  <!-- Section 4 -->
+  <div class="section" id="section4"
+       style="background-image: url('https://raw.githubusercontent.com/nestedlooops/music_thingy/main/videoplayback.mp4')">
+    <audio class="audio" id="audio4" loop>
+      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/Lake%20Shore%20Drive.mp3" type="audio/mp3">
+    </audio>
+    <div class="section-content">Lake Shore Drive</div>
+  </div>
 
-    <script>
-        // JavaScript for smooth scrolling between sections
-        document.querySelectorAll('.section').forEach((section, index) => {
-            section.addEventListener('wheel', function (e) {
-                if (e.deltaY > 0) {
-                    if (index < 3) {
-                        window.scrollTo({
-                            top: (index + 1) * window.innerHeight,
-                            behavior: 'smooth'
-                        });
-                    }
-                } else {
-                    if (index > 0) {
-                        window.scrollTo({
-                            top: (index - 1) * window.innerHeight,
-                            behavior: 'smooth'
-                        });
-                    }
-                }
-            });
-        });
-    </script>
+  <script>
+    const audios = {
+      section1: document.getElementById('audio1'),
+      section2: document.getElementById('audio2'),
+      section3: document.getElementById('audio3'),
+      section4: document.getElementById('audio4'),
+    };
+
+    let currentAudio = null;
+    let lastIndex = 0;
+
+    function fadeAudio(audio, fadeIn = true) {
+      if (!audio) return;
+      const step = 0.05;
+      const interval = 100;
+
+      if (fadeIn) {
+        audio.volume = 0;
+        audio.play();
+        const fadeInInterval = setInterval(() => {
+          if (audio.volume < 1) {
+            audio.volume = Math.min(audio.volume + step, 1);
+          } else {
+            clearInterval(fadeInInterval);
+          }
+        }, interval);
+      } else {
+        const fadeOutInterval = setInterval(() => {
+          if (audio.volume > 0) {
+            audio.volume = Math.max(audio.volume - step, 0);
+          } else {
+            clearInterval(fadeOutInterval);
+            audio.pause();
+          }
+        }, interval);
+      }
+    }
+
+    function handleAudioForSection(index) {
+      const sectionId = `section${index}`;
+      const targetAudio = audios[sectionId];
+
+      if (currentAudio && currentAudio !== targetAudio) {
+        fadeAudio(currentAudio, false);
+      }
+
+      if (targetAudio && currentAudio !== targetAudio) {
+        fadeAudio(targetAudio, true);
+        currentAudio = targetAudio;
+      }
+
+      if (!targetAudio && currentAudio) {
+        fadeAudio(currentAudio, false);
+        currentAudio = null;
+      }
+    }
+
+    const sections = document.querySelectorAll('.section');
+
+    sections.forEach((section, index) => {
+      section.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        if (e.deltaY > 0 && index < sections.length - 1) {
+          window.scrollTo({
+            top: (index + 1) * window.innerHeight,
+            behavior: 'smooth'
+          });
+        } else if (e.deltaY < 0 && index > 0) {
+          window.scrollTo({
+            top: (index - 1) * window.innerHeight,
+            behavior: 'smooth'
+          });
+        }
+      }, { passive: false });
+    });
+
+    window.addEventListener('scroll', () => {
+      const currentIndex = Math.round(window.scrollY / window.innerHeight);
+      if (currentIndex !== lastIndex) {
+        handleAudioForSection(currentIndex);
+        lastIndex = currentIndex;
+      }
+    });
+
+    window.addEventListener('load', () => {
+      handleAudioForSection(0);
+    });
+  </script>
 
 </body>
 </html>
