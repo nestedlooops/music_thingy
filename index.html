@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Scrolling Video Website</title>
+  <title>Scrolling Video Website with Snap</title>
   <style>
     /* Basic Reset */
     * {
@@ -12,11 +12,14 @@
       box-sizing: border-box;
     }
 
-    body, html {
+    html, body {
       height: 100%;
       font-family: Arial, sans-serif;
-      scroll-behavior: smooth;
       overflow-y: scroll;
+      scroll-behavior: smooth;
+
+      /* Enable scroll snap */
+      scroll-snap-type: y mandatory;
     }
 
     .section {
@@ -27,6 +30,9 @@
       justify-content: center;
       align-items: center;
       overflow: hidden;
+
+      /* Snap each section at top */
+      scroll-snap-align: start;
     }
 
     .video {
@@ -50,67 +56,48 @@
       pointer-events: none;
     }
 
-    /* Overlay to darken video slightly for better text visibility */
     .overlay {
       position: absolute;
       top:0; left:0; width: 100%; height: 100%;
       background: rgba(0,0,0,0.4);
       z-index: 1;
     }
-
-    /* Scrollbar styling (optional) */
-    ::-webkit-scrollbar {
-      width: 8px;
-    }
-    ::-webkit-scrollbar-thumb {
-      background-color: rgba(0,0,0,0.3);
-      border-radius: 4px;
-    }
   </style>
 </head>
 <body>
 
-  <!-- Section 1 -->
   <div class="section" id="section1" data-audio="audio1">
     <video class="video" autoplay muted loop playsinline>
       <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474394068.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
     </video>
     <div class="overlay"></div>
     <div class="section-content">Blue</div>
   </div>
 
-  <!-- Section 2 -->
   <div class="section" id="section2" data-audio="audio2">
     <video class="video" autoplay muted loop playsinline>
       <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474441601.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
     </video>
     <div class="overlay"></div>
     <div class="section-content">Bye Bye My Blue</div>
   </div>
 
-  <!-- Section 3 -->
   <div class="section" id="section3" data-audio="audio3">
     <video class="video" autoplay muted loop playsinline>
       <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474437531.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
     </video>
     <div class="overlay"></div>
     <div class="section-content">Zombie</div>
   </div>
 
-  <!-- Section 4 -->
   <div class="section" id="section4" data-audio="audio4">
     <video class="video" autoplay muted loop playsinline>
       <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/videoplayback.mp4" type="video/mp4" />
-      Your browser does not support the video tag.
     </video>
     <div class="overlay"></div>
     <div class="section-content">Lake Shore Drive</div>
   </div>
 
-  <!-- Audio elements outside sections, only one will play -->
   <audio id="audio1" loop>
     <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/Blue.mp3" type="audio/mp3" />
   </audio>
@@ -125,23 +112,6 @@
   </audio>
 
   <script>
-    // Smooth scroll on wheel
-    document.querySelectorAll('.section').forEach((section, index, sections) => {
-      section.addEventListener('wheel', function(e) {
-        if (e.deltaY > 0 && index < sections.length - 1) {
-          window.scrollTo({
-            top: (index + 1) * window.innerHeight,
-            behavior: 'smooth'
-          });
-        } else if (e.deltaY < 0 && index > 0) {
-          window.scrollTo({
-            top: (index - 1) * window.innerHeight,
-            behavior: 'smooth'
-          });
-        }
-      });
-    });
-
     const audios = {
       audio1: document.getElementById('audio1'),
       audio2: document.getElementById('audio2'),
@@ -152,33 +122,29 @@
     let currentAudio = null;
     let isPlaying = false;
 
-    // Play audio for visible section and pause others
     function playAudioForSection() {
       const scrollPosition = window.scrollY;
       const vh = window.innerHeight;
 
-      // Find which section is currently most visible
+      // Calculate the nearest section index snapped into view
       const index = Math.round(scrollPosition / vh);
       const section = document.querySelectorAll('.section')[index];
       if (!section) return;
 
       const audioId = section.getAttribute('data-audio');
 
-      // If already playing the correct audio, do nothing
-      if (currentAudio === audioId) return;
+      if (currentAudio === audioId) return; // Already playing right audio
 
-      // Pause all audios
+      // Pause all audios and reset
       Object.values(audios).forEach(audio => {
         audio.pause();
         audio.currentTime = 0;
       });
 
-      // Play new audio
       const audioToPlay = audios[audioId];
       if (audioToPlay) {
-        // Play only after user interaction (required by browsers)
         if (!isPlaying) {
-          console.log('Waiting for user interaction to start audio.');
+          // Waiting for user interaction to allow autoplay
           return;
         }
         audioToPlay.play();
@@ -186,28 +152,30 @@
       }
     }
 
-    // Initial check
-    window.addEventListener('scroll', playAudioForSection);
+    // Debounce scroll event to trigger after user stops scrolling for 100ms
+    let scrollTimeout;
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        playAudioForSection();
+      }, 100);
+    });
 
-    // Start audio after first user interaction
+    // Play audio after first user interaction
     function startAudioOnUserInteraction() {
       if (isPlaying) return;
       isPlaying = true;
       playAudioForSection();
-
-      // Remove event listeners after first use
       window.removeEventListener('click', startAudioOnUserInteraction);
       window.removeEventListener('keydown', startAudioOnUserInteraction);
       window.removeEventListener('touchstart', startAudioOnUserInteraction);
     }
-
-    // Listen for user interaction to allow autoplay
     window.addEventListener('click', startAudioOnUserInteraction);
     window.addEventListener('keydown', startAudioOnUserInteraction);
     window.addEventListener('touchstart', startAudioOnUserInteraction);
 
-    // Optional: On load, scroll to top
-    window.scrollTo(0, 0);
+    // Scroll to top on load to start fresh
+    window.scrollTo(0,0);
   </script>
 
 </body>
