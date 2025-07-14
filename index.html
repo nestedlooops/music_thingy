@@ -2,47 +2,43 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Scrolling Video Website with Snap</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Scrolling Music Page with Images and Video</title>
   <style>
-    /* Basic Reset */
-    * {
+    html, body {
       margin: 0;
       padding: 0;
-      box-sizing: border-box;
-    }
-
-    html, body {
       height: 100%;
-      font-family: Arial, sans-serif;
       overflow-y: scroll;
       scroll-behavior: smooth;
-
-      /* Enable scroll snap */
       scroll-snap-type: y mandatory;
+      font-family: sans-serif;
     }
 
     .section {
-      position: relative;
-      width: 100vw;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      overflow: hidden;
-
-      /* Snap each section at top */
       scroll-snap-align: start;
+      height: 100vh;
+      position: relative;
+      overflow: hidden;
     }
 
-    .video {
+    .background {
       position: absolute;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
+      top: 0;
+      left: 0;
       width: 100%;
       height: 100%;
       object-fit: cover;
+      z-index: 0;
+    }
+
+    .overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.4);
       z-index: 1;
     }
 
@@ -52,52 +48,43 @@
       color: white;
       font-size: 3rem;
       text-align: center;
-      text-shadow: 0 0 10px rgba(0,0,0,0.7);
-      pointer-events: none;
-    }
-
-    .overlay {
-      position: absolute;
-      top:0; left:0; width: 100%; height: 100%;
-      background: rgba(0,0,0,0.4);
-      z-index: 1;
+      top: 40%;
     }
   </style>
 </head>
 <body>
 
-  <div class="section" id="section1" data-audio="audio1">
-    <video class="video" autoplay muted loop playsinline>
-      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474394068.mp4" type="video/mp4" />
-    </video>
+  <!-- Section 1: Static Image -->
+  <div class="section" data-audio="audio1">
+    <img class="background" src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474394068.webp" alt="Blue" />
     <div class="overlay"></div>
     <div class="section-content">Blue</div>
   </div>
 
-  <div class="section" id="section2" data-audio="audio2">
-    <video class="video" autoplay muted loop playsinline>
-      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474441601.mp4" type="video/mp4" />
-    </video>
+  <!-- Section 2: Static Image -->
+  <div class="section" data-audio="audio2">
+    <img class="background" src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474441601.webp" alt="Bye Bye My Blue" />
     <div class="overlay"></div>
     <div class="section-content">Bye Bye My Blue</div>
   </div>
 
-  <div class="section" id="section3" data-audio="audio3">
-    <video class="video" autoplay muted loop playsinline>
-      <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474437531.mp4" type="video/mp4" />
-    </video>
+  <!-- Section 3: Static Image -->
+  <div class="section" data-audio="audio3">
+    <img class="background" src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474437531.webp" alt="Zombie" />
     <div class="overlay"></div>
     <div class="section-content">Zombie</div>
   </div>
 
-  <div class="section" id="section4" data-audio="audio4">
-    <video class="video" autoplay muted loop playsinline>
+  <!-- Section 4: Video Background -->
+  <div class="section" data-audio="audio4">
+    <video class="background" autoplay muted loop playsinline>
       <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/videoplayback.mp4" type="video/mp4" />
     </video>
     <div class="overlay"></div>
     <div class="section-content">Lake Shore Drive</div>
   </div>
 
+  <!-- Audio elements -->
   <audio id="audio1" loop>
     <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/Blue.mp3" type="audio/mp3" />
   </audio>
@@ -123,59 +110,45 @@
     let isPlaying = false;
 
     function playAudioForSection() {
-      const scrollPosition = window.scrollY;
-      const vh = window.innerHeight;
-
-      // Calculate the nearest section index snapped into view
-      const index = Math.round(scrollPosition / vh);
-      const section = document.querySelectorAll('.section')[index];
+      const scrollY = window.scrollY;
+      const index = Math.round(scrollY / window.innerHeight);
+      const sections = document.querySelectorAll('.section');
+      const section = sections[index];
       if (!section) return;
 
-      const audioId = section.getAttribute('data-audio');
+      const audioId = section.dataset.audio;
+      if (currentAudio === audioId) return;
 
-      if (currentAudio === audioId) return; // Already playing right audio
-
-      // Pause all audios and reset
-      Object.values(audios).forEach(audio => {
+      for (let audio of Object.values(audios)) {
         audio.pause();
         audio.currentTime = 0;
-      });
+      }
 
-      const audioToPlay = audios[audioId];
-      if (audioToPlay) {
-        if (!isPlaying) {
-          // Waiting for user interaction to allow autoplay
-          return;
-        }
-        audioToPlay.play();
+      if (isPlaying) {
+        audios[audioId].play();
         currentAudio = audioId;
       }
     }
 
-    // Debounce scroll event to trigger after user stops scrolling for 100ms
     let scrollTimeout;
     window.addEventListener('scroll', () => {
       clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(() => {
-        playAudioForSection();
-      }, 100);
+      scrollTimeout = setTimeout(playAudioForSection, 100);
     });
 
-    // Play audio after first user interaction
-    function startAudioOnUserInteraction() {
-      if (isPlaying) return;
+    function userStarted() {
       isPlaying = true;
       playAudioForSection();
-      window.removeEventListener('click', startAudioOnUserInteraction);
-      window.removeEventListener('keydown', startAudioOnUserInteraction);
-      window.removeEventListener('touchstart', startAudioOnUserInteraction);
+      window.removeEventListener('click', userStarted);
+      window.removeEventListener('keydown', userStarted);
+      window.removeEventListener('touchstart', userStarted);
     }
-    window.addEventListener('click', startAudioOnUserInteraction);
-    window.addEventListener('keydown', startAudioOnUserInteraction);
-    window.addEventListener('touchstart', startAudioOnUserInteraction);
 
-    // Scroll to top on load to start fresh
-    window.scrollTo(0,0);
+    window.addEventListener('click', userStarted);
+    window.addEventListener('keydown', userStarted);
+    window.addEventListener('touchstart', userStarted);
+
+    window.scrollTo(0, 0);
   </script>
 
 </body>
