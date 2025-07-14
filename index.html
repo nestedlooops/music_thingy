@@ -50,32 +50,50 @@
       text-align: center;
       top: 40%;
     }
+
+    #start-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      color: white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 9999;
+      font-size: 2rem;
+      cursor: pointer;
+    }
   </style>
 </head>
 <body>
 
-  <!-- Section 1: Static Image -->
+  <div id="start-overlay">Click to Start</div>
+
+  <!-- Section 1 -->
   <div class="section" data-audio="audio1">
-    <img class="background" src="https://github.com/nestedlooops/music_thingy/blob/f94c39bd3c629d6a72036f7ef6bd6d69bfb7e7dc/1752474394068.webp" alt="Blue" />
+    <img class="background" src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474394068.webp" alt="Blue" />
     <div class="overlay"></div>
     <div class="section-content">Blue</div>
   </div>
 
-  <!-- Section 2: Static Image -->
+  <!-- Section 2 -->
   <div class="section" data-audio="audio2">
-    <img class="background" src="https://github.com/nestedlooops/music_thingy/blob/f94c39bd3c629d6a72036f7ef6bd6d69bfb7e7dc/1752474441601.webp" alt="Bye Bye My Blue" />
+    <img class="background" src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474441601.webp" alt="Bye Bye My Blue" />
     <div class="overlay"></div>
     <div class="section-content">Bye Bye My Blue</div>
   </div>
 
-  <!-- Section 3: Static Image -->
+  <!-- Section 3 -->
   <div class="section" data-audio="audio3">
-    <img class="background" src="https://github.com/nestedlooops/music_thingy/blob/f94c39bd3c629d6a72036f7ef6bd6d69bfb7e7dc/1752474437531.webp" alt="Zombie" />
+    <img class="background" src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/1752474437531.webp" alt="Zombie" />
     <div class="overlay"></div>
     <div class="section-content">Zombie</div>
   </div>
 
-  <!-- Section 4: Video Background -->
+  <!-- Section 4 -->
   <div class="section" data-audio="audio4">
     <video class="background" autoplay muted loop playsinline>
       <source src="https://raw.githubusercontent.com/nestedlooops/music_thingy/main/videoplayback.mp4" type="video/mp4" />
@@ -124,7 +142,7 @@
         audio.currentTime = 0;
       }
 
-      if (isPlaying) {
+      if (isPlaying && audios[audioId]) {
         audios[audioId].play();
         currentAudio = audioId;
       }
@@ -136,19 +154,16 @@
       scrollTimeout = setTimeout(playAudioForSection, 100);
     });
 
-    function userStarted() {
+    window.onload = () => {
+      window.scrollTo(0, 0);
+    };
+
+    const overlay = document.getElementById('start-overlay');
+    overlay.addEventListener('click', () => {
       isPlaying = true;
+      overlay.style.display = 'none';
       playAudioForSection();
-      window.removeEventListener('click', userStarted);
-      window.removeEventListener('keydown', userStarted);
-      window.removeEventListener('touchstart', userStarted);
-    }
-
-    window.addEventListener('click', userStarted);
-    window.addEventListener('keydown', userStarted);
-    window.addEventListener('touchstart', userStarted);
-
-    window.scrollTo(0, 0);
+    });
   </script>
 
 </body>
