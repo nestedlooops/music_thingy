@@ -127,43 +127,55 @@
     let currentAudio = null;
     let isPlaying = false;
 
-    function playAudioForSection() {
-      const scrollY = window.scrollY;
-      const index = Math.round(scrollY / window.innerHeight);
-      const sections = document.querySelectorAll('.section');
-      const section = sections[index];
-      if (!section) return;
-
-      const audioId = section.dataset.audio;
-      if (currentAudio === audioId) return;
-
+    function stopAllAudio() {
       for (let audio of Object.values(audios)) {
         audio.pause();
         audio.currentTime = 0;
       }
-
-      if (isPlaying && audios[audioId]) {
-        audios[audioId].play();
-        currentAudio = audioId;
-      }
     }
 
-    let scrollTimeout;
-    window.addEventListener('scroll', () => {
-      clearTimeout(scrollTimeout);
-      scrollTimeout = setTimeout(playAudioForSection, 100);
+    function playAudio(id) {
+      if (!isPlaying || currentAudio === id) return;
+      stopAllAudio();
+      audios[id].play();
+      currentAudio = id;
+    }
+
+    // IntersectionObserver setup
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          const section = entry.target;
+          const audioId = section.dataset.audio;
+          playAudio(audioId);
+        }
+      });
+    }, {
+      threshold: 0.6 // 60% of the section must be visible
+    });
+
+    document.querySelectorAll('.section').forEach(section => {
+      observer.observe(section);
+    });
+
+    // Handle user interaction to enable audio
+    const overlay = document.getElementById('start-overlay');
+    overlay.addEventListener('click', () => {
+      isPlaying = true;
+      overlay.style.display = 'none';
+      // Play the audio of the current section
+      document.querySelectorAll('.section').forEach(section => {
+        const rect = section.getBoundingClientRect();
+        if (rect.top >= 0 && rect.top < window.innerHeight) {
+          const audioId = section.dataset.audio;
+          playAudio(audioId);
+        }
+      });
     });
 
     window.onload = () => {
       window.scrollTo(0, 0);
     };
-
-    const overlay = document.getElementById('start-overlay');
-    overlay.addEventListener('click', () => {
-      isPlaying = true;
-      overlay.style.display = 'none';
-      playAudioForSection();
-    });
   </script>
 
 </body>
