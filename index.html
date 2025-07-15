@@ -66,11 +66,28 @@
       font-size: 2rem;
       cursor: pointer;
     }
+
+    .section.gray {
+      background: #999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .section.gray .section-content {
+      position: static;
+      font-size: 3.5rem;
+    }
   </style>
 </head>
 <body>
 
   <div id="start-overlay">Click to Start</div>
+
+  <!-- Section 0: No music -->
+  <div class="section gray">
+    <div class="section-content">Are you ready?</div>
+  </div>
 
   <!-- Section 1 -->
   <div class="section" data-audio="audio1">
@@ -141,34 +158,40 @@
       currentAudio = id;
     }
 
-    // IntersectionObserver setup
     const observer = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
           const section = entry.target;
           const audioId = section.dataset.audio;
-          playAudio(audioId);
+          if (audioId) {
+            playAudio(audioId);
+          } else {
+            stopAllAudio();
+            currentAudio = null;
+          }
         }
       });
     }, {
-      threshold: 0.6 // 60% of the section must be visible
+      threshold: 0.6
     });
 
     document.querySelectorAll('.section').forEach(section => {
       observer.observe(section);
     });
 
-    // Handle user interaction to enable audio
     const overlay = document.getElementById('start-overlay');
     overlay.addEventListener('click', () => {
       isPlaying = true;
       overlay.style.display = 'none';
-      // Play the audio of the current section
+
+      // Start correct audio for current visible section
       document.querySelectorAll('.section').forEach(section => {
         const rect = section.getBoundingClientRect();
         if (rect.top >= 0 && rect.top < window.innerHeight) {
           const audioId = section.dataset.audio;
-          playAudio(audioId);
+          if (audioId) {
+            playAudio(audioId);
+          }
         }
       });
     });
